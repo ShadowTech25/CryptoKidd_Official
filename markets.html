@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#FFD700"/>
+  <title>CryptoKid Market Intelligence</title>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      background: #000;
+      color: #FFD700;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .market-ticker {
+      background: #111;
+      color: #FFD700;
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 10px;
+      font-size: 0.9rem;
+      border-bottom: 1px solid #FFD700;
+    }
+
+    .market-ticker span {
+      display: inline-block;
+      white-space: nowrap;
+      padding-right: 40px;
+      animation: scroll-ticker 8s linear infinite;
+    }
+
+    @keyframes scroll-ticker {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .navbar {
+      background-color: #000;
+      border-bottom: 3px solid #FFD700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      font-family: 'UnifrakturCook', cursive;
+    }
+
+    .logo {
+      font-size: 2rem;
+      color: #FFD700;
+    }
+
+    .hamburger {
+      width: 30px;
+      height: 21px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+.hamburger span { display: block; height: 3px; width: 25px; background-color: #FFD700; border-radius: 2px; }
+
+    .hamburger div {
+      height: 3px;
+      background-color: #FFD700;
+      border-radius: 2px;
+    }
+
+    .nav-wrapper {
+      display: none;
+      flex-direction: column;
+      background-color: #111;
+      padding: 20px;
+    }
+
+    .nav-wrapper.show {
+      display: flex;
+    }
+
+    .nav-section {
+      border-top: 1px solid #FFD700;
+      padding: 15px 10px;
+    }
+
+    .nav-section h3 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      text-transform: uppercase;
+      color: #FFD700;
+      text-align: center;
+    }
+
+    .nav-section a {
+  color: #FFD700;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 6px 0;
+  display: block;
+  text-align: left;
+  padding-left: 14px;
+}
+
+    .nav-section a:hover {
+      color: white;
+    }
+
+    .market-section {
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .market-box {
+      background: #000;
+      border: 2px solid #FFD700;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+    }
+
+    .market-box h2 {
+      text-align: center;
+      color: #FFD700;
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+    }
+
+    .market-box p,
+    .market-box ul {
+      color: #FFD700;
+      font-size: 1rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .market-box ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .order-book {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+
+    .order-book div {
+      width: 45%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="market-ticker">
+    <span id="ticker-text">Loading live prices...</span>
+  </div>
+
+  <nav class="navbar">
+    <div class="logo">CryptoKid</div>
+    <div class="hamburger" onclick="toggleMenu()">
+      <div></div><div></div><div></div>
+    </div>
+  </nav>
+
+  <div class="nav-wrapper" id="navMenu">
+    <div class="nav-section">
+      <h3>Main</h3>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-section">
+      <h3>Learn</h3>
+      <a href="articles.html">Articles</a>
+      <a href="guides.html">Guides</a>
+    </div>
+    <div class="nav-section">
+      <h3>Tools</h3>
+      <a href="markets.html">Markets</a>
+      <a href="tools.html">Tools</a>
+      <a href="dashboard.html">Dashboard</a>
+    </div>
+  </div>
+
+  <div class="market-section">
+
+    <div class="market-box">
+      <h2>Trending Tokens (CoinGecko)</h2>
+      <ul id="trending-tokens">Loading...</ul>
+    </div>
+
+    <div class="market-box">
+      <h2>Market Fear & Greed Index</h2>
+      <p id="fear-greed">Loading...</p>
+    </div>
+
+    <div class="market-box">
+      <h2>Top Market Movers (24h)</h2>
+      <ul id="top-movers">Loading...</ul>
+    </div>
+
+    <div class="market-box">
+      <h2>Live BTC/USDT Order Book (Binance)</h2>
+      <div class="order-book">
+        <div><strong>Bids</strong><ul id="bids">Loading...</ul></div>
+        <div><strong>Asks</strong><ul id="asks">Loading...</ul></div>
+      </div>
+    </div>
+
+    <div class="market-box">
+      <h2>Whale Alerts (Live)</h2>
+      <ul id="whale-alerts">Loading whale transfers...</ul>
+    </div>
+
+    <div class="market-box">
+      <h2>Live Market Chart</h2>
+      <p>Embed TradingView, CoinGecko, or custom chart iframe here.</p>
+    </div>
+
+  </div>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("navMenu").classList.toggle("show");
+    }
+
+    // Trending Tokens
+    fetch('https://api.coingecko.com/api/v3/search/trending')
+      .then(res => res.json())
+      .then(data => {
+        const list = data.coins.map(c => `<li>${c.item.name} (${c.item.symbol.toUpperCase()})</li>`).join('');
+        document.getElementById('trending-tokens').innerHTML = list;
+      })
+      .catch(() => document.getElementById('trending-tokens').innerText = 'Failed to load data.');
+
+    // Fear & Greed Index
+    fetch('https://api.alternative.me/fng/')
+      .then(res => res.json())
+      .then(data => {
+        const value = data.data[0];
+        document.getElementById('fear-greed').innerText = `${value.value_classification} (${value.value}/100)`;
+      })
+      .catch(() => document.getElementById('fear-greed').innerText = 'Failed to load index.');
+
+    // Top Market Movers
+    fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=percent_change_24h_desc&per_page=5&page=1')
+      .then(res => res.json())
+      .then(data => {
+        const movers = data.map(coin => `<li>${coin.name} (${coin.symbol.toUpperCase()}): +${coin.price_change_percentage_24h.toFixed(2)}%</li>`).join('');
+        document.getElementById('top-movers').innerHTML = movers;
+      })
+      .catch(() => document.getElementById('top-movers').innerText = 'Failed to load movers.');
+
+    // Binance Order Book BTCUSDT
+    fetch('https://api.binance.com/api/v3/depth?symbol=BTCUSDT&limit=5')
+      .then(res => res.json())
+      .then(data => {
+        const bids = data.bids.map(bid => `<li>${parseFloat(bid[0]).toFixed(2)} @ ${parseFloat(bid[1]).toFixed(4)}</li>`).join('');
+        const asks = data.asks.map(ask => `<li>${parseFloat(ask[0]).toFixed(2)} @ ${parseFloat(ask[1]).toFixed(4)}</li>`).join('');
+        document.getElementById('bids').innerHTML = bids;
+        document.getElementById('asks').innerHTML = asks;
+      })
+      .catch(() => {
+        document.getElementById('bids').innerText = 'Failed to load';
+        document.getElementById('asks').innerText = 'Failed to load';
+      });
+
+    // Whale Alert
+    fetch('https://api.whale-alert.io/v1/transactions?api_key=demo&min_value=500000¤cy=usd')
+      .then(res => res.json())
+      .then(data => {
+        const list = (data.transactions || []).map(tx => `<li>${tx.amount} ${tx.symbol} from ${tx.from.owner_type} to ${tx.to.owner_type}</li>`).join('');
+        document.getElementById('whale-alerts').innerHTML = list || '<li>No recent whale transfers</li>';
+      })
+      .catch(() => document.getElementById('whale-alerts').innerText = 'Failed to load whale alert data.');
+
+    // Market Ticker
+    fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1')
+      .then(res => res.json())
+      .then(data => {
+        const ticker = data.map(c => `${c.symbol.toUpperCase()}: $${c.current_price}`).join(' | ');
+        document.getElementById('ticker-text').innerText = ticker;
+      })
+      .catch(() => document.getElementById('ticker-text').innerText = 'Ticker failed to load.');
+  </script>
+
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+  import { getFirestore, doc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD4W0T6-0G9jYm0obX7gUzDWT1aahXzMmU",
+    authDomain: "cryptokidd-ca13d.firebaseapp.com",
+    projectId: "cryptokidd-ca13d",
+    storageBucket: "cryptokidd-ca13d.firebasestorage.app",
+    messagingSenderId: "658724474932",
+    appId: "1:658724474932:web:d764b523f37f727b2e3a61"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth();
+  const db = getFirestore(app);
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const uid = user.uid;
+      const toolName = document.title;
+      const toolLink = window.location.pathname.split('/').pop();
+
+      await updateDoc(doc(db, "users", uid), {
+        recentTools: arrayUnion({ name: toolName, link: toolLink })
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
